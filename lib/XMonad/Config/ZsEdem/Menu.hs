@@ -28,7 +28,7 @@ queryIsInTitle :: String -> Query Bool
 queryIsInTitle windowNameMatcher = isSubsequenceOf windowNameMatcher <$> title
 
 openWebPage :: String -> String -> X ()
-openWebPage subString webpage = nextTitleMatchOrSpawn subString $ "google-chrome --app=http://" ++ webpage
+openWebPage subString webpage = nextTitleMatchOrSpawn subString $ "google-chrome-stable --app=http://" ++ webpage
 
 nextTitleMatchOrSpawn :: String -> String -> X ()
 nextTitleMatchOrSpawn windowSubTitle command = nextMatchOrDo
@@ -43,7 +43,7 @@ customCommandMenu :: X ()
 customCommandMenu = do
     windows <- windowMap
     layoutFiles <- filter (`notElem` [".", ".."] ) <$> liftIO (getDirectoryContents ".screenlayout")
-    let commands = ["hangups", "idea", "term", "newtmux", "wifi off",
+    let commands = ["idea", "term", "tmux", "wifi off",
                     "chrome", "network", "wifi on",
                     "google", "openUrl"]
         windowPrefix = "window: "
@@ -81,10 +81,8 @@ customCommandMenu = do
                 _ -> return ()
         | True -> spawn $ unwords ["notify-send 'Pattern Match Failure' '", choosed, ","]
   where
-    terminalRun = nextMatchOrDo Forward (("st"==) <$> title) $ loggedSpawn "exec st -f 'Monofur for Powerline:size=19'"
-    hangups = nextTitleMatchOrSpawn "hangups" "exec st -f 'Monofur for Powerline:size=19' -e hangups"
+    terminalRun = nextMatchOrDo Forward (("st"==) <$> title) $ loggedSpawn "exec term"
     getXselection = runProcessWithInput "xclip" ["-o", "-selection"] ""
-    commandRun c | c `elem` ["hangups", "hangout"] = hangups
     commandRun "idea" = nextTitleMatchOrSpawn "IntelliJ" "exec pycharm"
     commandRun c | c `elem` ["term", "st"] = terminalRun
     commandRun "google" = do
@@ -94,11 +92,9 @@ customCommandMenu = do
     commandRun "openUrl" = do
         selection <- getXselection
         loggedSpawn $ "xdg-open " ++ selection
-    commandRun "newtmux" = loggedSpawn "exec st -f 'Monofur for Powerline:size=19' -e tmux"
-    commandRun "chrome" = nextTitleMatchOrSpawn "chrome" "exec google-chrome"
+    commandRun "tmux" = loggedSpawn "attach-tmux"
+    commandRun "chrome" = nextTitleMatchOrSpawn "chrome" "exec google-chrome-stable"
     commandRun "xmonad config" = nextTitleMatchOrSpawn ".xmonad" "exec atom .xmonad"
-    commandRun "network" = loggedSpawn "nmcli_dmenu"
-    commandRun "subl3" = loggedSpawn "subl3"
     commandRun ('w':'i':'f':'i':' ':switch)= wifi switch
     commandRun _ = return ()
     wifi switch = loggedSpawn $ "notify-send 'Wifi' `nmcli radio wifi " ++ switch ++ "`"

@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 module Main(main) where
 import           System.Directory                 (getHomeDirectory)
+import           Data.Default                     (def)
 import           XMonad
 import           XMonad.Config.ZsEdem             (themeColor)
 import qualified XMonad.Config.ZsEdem             as ZsEdem
@@ -10,12 +11,16 @@ import           XMonad.Layout.NoBorders          (smartBorders)
 import           XMonad.Layout.Spacing            (spacing)
 import           XMonad.Layout.WindowNavigation   (windowNavigation)
 import           XMonad.Util.EZConfig             (additionalKeys)
+import           XMonad.Layout.Tabbed             (tabbed, shrinkText)
 
 
-layoutHook' = avoidStruts $ smartBorders $ windowNavigation ( Full ||| sTall ||| Mirror mTall )
+layoutHook' = avoidStruts $ smartBorders $ windowNavigation (
+                      Full |||
+                      tabbed shrinkText ZsEdem.theme |||
+                      tall |||
+                      Mirror tall )
         where
-            sTall = spacing 5 $ Tall 1 (3/100) (2/3)
-            mTall = spacing 5 $ Tall 1 (3/100) (2/3)
+            tall = spacing 5 $ Tall 1 (3/100) (2/3)
 
 main = do
     homePath <- (++"/")<$> getHomeDirectory

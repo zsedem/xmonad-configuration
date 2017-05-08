@@ -20,7 +20,7 @@ theme =  def
              , urgentTextColor = red
              , decoHeight = 30
              , decoWidth = 30
-             , fontName = "-Monofur for Powerline-*-*-*-*-12-*-*-*-*-*-*-*"
+             , fontName = "-monofur-*-*-*-*-12-*-*-*-*-*-*-*"
              }
     where
         black = "#000000"

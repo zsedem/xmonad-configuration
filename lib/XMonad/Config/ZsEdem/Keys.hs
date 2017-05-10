@@ -59,7 +59,7 @@ keyBindings =
               ]  ++  workspaceSwitcherKeyBindings
              where
                 xmonad_restart = "xmonad --restart"
-                layoutSwitch = do keyboardlayout <- R.runProcessWithInput "xkblayout-state" ["print", "%s"] ""
+                layoutSwitch = do keyboardlayout <- R.runProcessWithInput "/run/current-system/sw/bin/xkblayout-state" ["print", "%s"] ""
                                   let newLayout = nextItem ["us", "hu"] keyboardlayout
                                   spawn $ "setxkbmap " ++ newLayout
                 canberrabell e = spawn "canberra-gtk-play -i bell">> e

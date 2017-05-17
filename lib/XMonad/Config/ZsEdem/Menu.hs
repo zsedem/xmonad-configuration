@@ -83,7 +83,7 @@ customCommandMenu = do
   where
     terminalRun = nextMatchOrDo Forward (("st"==) <$> title) $ loggedSpawn "exec term"
     getXselection = runProcessWithInput "xclip" ["-o", "-selection"] ""
-    commandRun "idea" = nextTitleMatchOrSpawn "IntelliJ" "exec pycharm"
+    commandRun "idea" = nextTitleMatchOrSpawn "IntelliJ" "exec idea-community"
     commandRun c | c `elem` ["term", "st"] = terminalRun
     commandRun "google" = do
         selection <- getXselection

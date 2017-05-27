@@ -44,7 +44,7 @@ customCommandMenu = do
     windows <- windowMap
     layoutFiles <- filter (`notElem` [".", ".."] ) <$> liftIO (getDirectoryContents ".screenlayout")
     let commands = ["idea", "term", "tmux", "wifi off",
-                    "chrome", "network", "wifi on",
+                    "chrome", "wifi on",
                     "google", "openUrl"]
         windowPrefix = "window: "
         commandPrefix = "command: "
@@ -96,7 +96,7 @@ customCommandMenu = do
     commandRun "chrome" = nextTitleMatchOrSpawn "chrome" "exec google-chrome-stable"
     commandRun "xmonad config" = nextTitleMatchOrSpawn ".xmonad" "exec atom .xmonad"
     commandRun ('w':'i':'f':'i':' ':switch)= wifi switch
-    commandRun _ = return ()
+    commandRun choosed = spawn $ unwords ["notify-send 'Pattern Match Failure' '", choosed, ","]
     wifi switch = loggedSpawn $ "notify-send 'Wifi' `nmcli radio wifi " ++ switch ++ "`"
 
 webAppMap :: [(String, (String, String))]

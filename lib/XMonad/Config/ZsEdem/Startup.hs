@@ -10,6 +10,8 @@ startupHook = do
           [ "xsetroot -cursor_name left_ptr"
           , "nitrogen --restore"
           , "dunst -conf ~/.dunstrc"
+          , "xss-lock -n 'notify-send \"locking screen\"' hlock"
+          , "xset s 60 5"
           , "nm-applet"]
   where
         execOnce = spawn . ("exec "++)

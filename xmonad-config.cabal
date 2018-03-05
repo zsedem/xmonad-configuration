@@ -10,9 +10,16 @@ copyright:           2015 Zsigmond Ádám Olivér
 build-type:          Simple
 cabal-version:       >=1.10
 
-executable xmonad-build
+Flag Standalone
+  Description: Compile for standalone without a desktop manager like xfce
+  Default:     False
+
+executable xmonad
   main-is:             xmonad.hs
-  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  if flag(standalone)
+    ghc-options:         -cpp -DSTANDALONE=1 -Wall -threaded -rtsopts -with-rtsopts=-N
+  else
+    ghc-options:         -cpp -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , xmonad
                      , xmonad-contrib

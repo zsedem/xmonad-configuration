@@ -3,10 +3,11 @@ module Main(main) where
 import           System.Directory                 (getHomeDirectory)
 import           Data.Default                     (def)
 import           XMonad
+import           XMonad.Config.Xfce
 import           XMonad.Config.ZsEdem             (themeColor)
 import qualified XMonad.Config.ZsEdem             as ZsEdem
 import           XMonad.Hooks.EwmhDesktops        (ewmh)
-import           XMonad.Hooks.ManageDocks         (avoidStruts, docksEventHook)
+import           XMonad.Hooks.ManageDocks         (docks, avoidStruts)
 import           XMonad.Layout.NoBorders          (smartBorders)
 import           XMonad.Layout.Spacing            (spacing)
 import           XMonad.Layout.WindowNavigation   (windowNavigation)
@@ -14,9 +15,9 @@ import           XMonad.Util.EZConfig             (additionalKeys)
 import           XMonad.Layout.Tabbed             (tabbed, shrinkText)
 
 
-layoutHook' = avoidStruts $ smartBorders $ windowNavigation (
-                      Full |||
+layoutHook' = smartBorders $ avoidStruts $ windowNavigation (
                       tabbed shrinkText ZsEdem.theme |||
+                      Full |||
                       tall |||
                       Mirror tall )
         where
@@ -24,8 +25,8 @@ layoutHook' = avoidStruts $ smartBorders $ windowNavigation (
 
 main = do
     homePath <- (++"/")<$> getHomeDirectory
-    let desktopConfig = ewmh $ def
-    xmonad $ desktopConfig
+    let desktopConfig =  xfceConfig
+    xmonad $ ewmh $ docks $ desktopConfig
      { manageHook = ZsEdem.manageHook <+> manageHook desktopConfig
      , layoutHook = layoutHook'
      , modMask = mod4Mask
@@ -37,6 +38,5 @@ main = do
      , normalBorderColor = "#424242"
      , borderWidth = 2
      , startupHook = startupHook desktopConfig >> ZsEdem.startupHook
-     , handleEventHook = docksEventHook <+> handleEventHook desktopConfig
      } `additionalKeys` ZsEdem.keyBindings
 

@@ -6,6 +6,7 @@ import           XMonad.Util.Run        (runProcessWithInput)
 startupHook :: X ()
 startupHook = do
     setWMName "LG3D"
+#ifdef STANDALONE_CONFIG
     mapM_ execOnce
           [ "xsetroot -cursor_name left_ptr"
           , "nitrogen --restore"
@@ -15,3 +16,4 @@ startupHook = do
           , "nm-applet"]
   where
         execOnce = spawn . ("exec "++)
+#endif

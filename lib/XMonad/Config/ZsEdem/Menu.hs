@@ -101,12 +101,9 @@ customCommandMenu = do
 
 webAppMap :: [(String, (String, String))]
 webAppMap =
-    [ ("jenkins", ("Jenkins", "jenkins.bsp.balabit"))
-    , ("mail", ("Inbox", "inbox.google.com"))
+    [ ("mail", ("Inbox", "inbox.google.com"))
     , ("inbox", ("Inbox", "inbox.google.com"))
     , ("calendar", ("Calendar", "calendar.google.com"))
-    , ("jira", ("Jira", "jira.balabit"))
-    , ("review", ("review.balabit", "review.balabit/#/q/project:bsp/bsp+status:open"))
     ]
 
 loggedSpawn :: String -> X ()

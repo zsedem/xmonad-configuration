@@ -73,7 +73,9 @@ customCommandMenu = do
             let screenLayout = drop (length screenLayoutPrefix) choosed
                 layoutFile = ".screenlayout/" ++ screenLayout
             loggedSpawn layoutFile
+#ifdef STANDALONE_CONFIG
             spawn "sleep 1; nitrogen --restore"
+#endif
         | webPrefix |- choosed -> do
             let web = drop (length webPrefix) choosed
             case lookup web webAppMap of
@@ -81,7 +83,7 @@ customCommandMenu = do
                 _ -> return ()
         | True -> spawn $ unwords ["notify-send 'Pattern Match Failure' '", choosed, ","]
   where
-    terminalRun = nextMatchOrDo Forward (("st"==) <$> title) $ loggedSpawn "exec term"
+    terminalRun = nextMatchOrDo Forward (("st"==) <$> title) $ loggedSpawn "exec xfce-terminal"
     getXselection = runProcessWithInput "xclip" ["-o", "-selection"] ""
     commandRun "idea" = nextTitleMatchOrSpawn "IntelliJ" "exec idea-community"
     commandRun c | c `elem` ["term", "st"] = terminalRun

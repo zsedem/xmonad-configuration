@@ -13,6 +13,7 @@ import           XMonad.Layout.Spacing            (spacing)
 import           XMonad.Layout.WindowNavigation   (windowNavigation)
 import           XMonad.Util.EZConfig             (additionalKeys)
 import           XMonad.Layout.Tabbed             (tabbed, shrinkText)
+import           XMonad.Hooks.SetWMName           (setWMName)
 
 
 layoutHook' = smartBorders $ avoidStruts $ windowNavigation (
@@ -25,15 +26,16 @@ layoutHook' = smartBorders $ avoidStruts $ windowNavigation (
 
 main = do
     homePath <- (++"/")<$> getHomeDirectory
-    let desktopConfig =  xfceConfig
+    let desktopConfig = def
     xmonad $ ewmh $ docks $ desktopConfig
      { manageHook = ZsEdem.manageHook <+> manageHook desktopConfig
      , layoutHook = layoutHook'
+     , logHook = logHook desktopConfig >> setWMName "LG3D"
      , modMask = mod4Mask
      , workspaces = ZsEdem.workspaces
      , focusFollowsMouse  = False
      , clickJustFocuses   = False
-     , terminal = "st -f 'Monofur for Powerline:size=19'"
+     , terminal = "xfce-terminal"
      , focusedBorderColor = themeColor
      , normalBorderColor = "#424242"
      , borderWidth = 2
